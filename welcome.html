@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Document</title>
+
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            background-image: url(images/backdroptoe.png);
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            font-size: 70px;
+            margin: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background-color: #d0ffd0;
+            color: black;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div id="intro">
+            <h1>TOE FOEST</h1>
+            <h1>TOE FOERIOUS</h1>
+        </div>
+        <div id="inputsec">
+            <input type="text" id="player1" placeholder="Enter Player 1...">
+            <input type="text" id="player2" placeholder="Enter Player 2...">
+            <br>
+        </div>
+        <a href="tictactoe.html"><button id="begin">MULAI MAIN</button></a>
+    </div>
+
+    <script>
+        document.getElementById("begin").addEventListener("click", function () {
+            let player1name = document.getElementById("player1").value.trim()
+            let player2name = document.getElementById("player2").value.trim()
+            
+            let mintaRandom = Math.random();
+            let cekBoolean;
+            
+            if (mintaRandom >= 0.5) {
+                cekBoolean = true;
+            } else {
+                cekBoolean = false;
+            }
+            
+            let playerX = "";
+            let playerO = "";
+            
+            if (cekBoolean) {
+                playerX = player1name;
+                playerO = player2name;
+            } else {
+                playerX = player2name;
+                playerO = player1name;
+            }
+
+            localStorage.setItem("playerX", playerX)
+            localStorage.setItem("playerO", playerO)
+            
+            window.location.href = "tictactoe.html"
+            
+        });
+    </script>
+    
+</body>
+
+</html>
