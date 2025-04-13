@@ -220,7 +220,7 @@
         let currentPlayer = 'X';
         let boardState = ['', '', '', '', '', '', '', '', '']
         let gameOn = true
-        let timer;
+        let timer
 
         let playerX = ""
         let namaPemainX = localStorage.getItem("playerX")
@@ -238,30 +238,30 @@
             playerO = "Player O"
         }
 
-        document.getElementById("playerXInfo").textContent = `${playerX} = (X)`;
-        document.getElementById("playerOInfo").textContent = `(O) = ${playerO}`;
+        document.getElementById("playerXInfo").textContent = `${playerX} = (X)`
+        document.getElementById("playerOInfo").textContent = `(O) = ${playerO}`
 
         const turnDisplay = document.getElementById('turnDisplay')
         const reset = document.getElementById('reset')
         const balikMenu = document.getElementById("menu")
 
         function createBoard() {
-            const board = document.getElementById('board');
+            const board = document.getElementById('board')
             board.innerHTML = ''
 
             for (let i = 0; i < 9; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'cell';
-                cell.setAttribute('data-index', i);
+                const cell = document.createElement('div')
+                cell.className = 'cell'
+                cell.setAttribute('data-index', i)
                 cell.addEventListener('click', clickedCell)
-                board.appendChild(cell);
+                board.appendChild(cell)
             }
 
-        updateTurnDisplay();
+        updateTurnDisplay()
         }
 
         function updateTurnDisplay() {
-            let currentPlayerName;
+            let currentPlayerName
 
             if (currentPlayer === "X") {
                 currentPlayerName = playerX
@@ -272,200 +272,141 @@
             turnDisplay.textContent = `Giliran ${currentPlayerName}!`
         }
 
+        function showModal(message, title) {
+            let modalVar = document.getElementById('modal')
+            modalVar.innerHTML = ''
+
+            let insideModal = document.createElement('div')
+            insideModal.setAttribute('id', 'inside')
+
+            let closeButton = document.createElement('span')
+            closeButton.setAttribute('id', 'close')
+            closeButton.innerHTML = '&times;'
+
+            let messageTitle = document.createElement('h1')
+            messageTitle.textContent = title
+
+            let messageContent = document.createElement('p')
+            messageContent.textContent = message
+
+            insideModal.appendChild(closeButton)
+            insideModal.appendChild(messageTitle)
+            insideModal.appendChild(messageContent)
+            modalVar.appendChild(insideModal)
+
+            modalVar.style.display = 'block'
+
+            closeButton.onclick = function () {
+                modalVar.style.display = 'none'
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modalVar) {
+                    modalVar.style.display = 'none'
+                }
+            }
+        }
 
         function clickTimer() {
-            clearInterval(timer)
-            time = 8
+            clearInterval(timer);
+            time = 8;
 
-            const countdown = document.getElementById('countdown')
-            countdown.textContent = `${time} detik`
+            const countdown = document.getElementById('countdown');
+            countdown.textContent = `${time} detik`;
 
             timer = setInterval(() => {
-                time--
-                countdown.textContent = `${time} detik`
+                time--;
+                countdown.textContent = `${time} detik`;
 
                 if (time <= 0) {
-                    clearInterval(timer)
-                    gameOn = false
-                    
-                    let currentPlayerName = currentPlayer === 'X' ? playerX : playerO
-                    turnDisplay.textContent = `${currentPlayerName} waktu kamu habis`
+                    clearInterval(timer);
+                    gameOn = false;
 
-                    let modalVar = document.getElementById('modal')
-                    modalVar.innerHTML = ''
+                    let currentPlayerName = currentPlayer === 'X' ? playerX : playerO;
+                    turnDisplay.textContent = `${currentPlayerName} waktu kamu habis`;
 
-                    let insideModal = document.createElement("div")
-                    insideModal.setAttribute("id", "inside")
-
-                    let closeButton = document.createElement("span")
-                    closeButton.setAttribute("id", "close")
-                    closeButton.innerHTML = "&times;"
-
-                    let timeoutMessage = document.createElement("h1")
-                    timeoutMessage.textContent = "WAKTU HABIS!"
-
-                    insideModal.appendChild(closeButton)
-                    insideModal.appendChild(timeoutMessage)
-                    modalVar.appendChild(insideModal)
-                    modalVar.style.display = "block"
-
-                    closeButton.onclick = () => modalVar.style.display = "none"
-                    window.onclick = (event) => {
-                        if (event.target == modalVar) {
-                            modalVar.style.display = "none"
-                        }
-                    }
+                    showModal('WAKTU HABIS!', `${currentPlayerName} waktunya habis`);
                 }
-            }, 1000)
+            }, 1000);
         }
 
         function clickedCell(event) {
-            if (!gameOn) return 
+            if (!gameOn) return
 
-            const cell = event.target;
+            const cell = event.target
             const index = Number(cell.getAttribute('data-index'))
-
 
             if (cell.className === 'cell' && boardState[index] === '') {
                 clearInterval(timer)
-                cell.className += ' clicked';
-                cell.textContent = currentPlayer;
+                cell.className += ' clicked'
+                cell.textContent = currentPlayer
                 boardState[index] = currentPlayer
 
                 checkWinner()
 
                 if (gameOn) {
-                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                    updateTurnDisplay();
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X'
+                    updateTurnDisplay()
                     clickTimer()
                 }
             }
-
         }
 
         function checkWinner() {
-
-            const winPattern = [[0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 4, 8], [2, 4, 6]]
+            const winPattern = [
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], 
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], 
+                [0, 4, 8], [2, 4, 6]
+            ];
 
             for (let i = 0; i < winPattern.length; i++) {
-                let [a, b, c] = winPattern[i]
+                let [a, b, c] = winPattern[i];
                 if (boardState[a] !== '' && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
-                    gameOn = false
-                    clearInterval(timer)
+                    gameOn = false;
+                    clearInterval(timer);
 
-                    const board = document.getElementById("board").children;
+                    const board = document.getElementById('board').children;
 
                     document.querySelectorAll('.cell')[a].classList.add('win');
                     document.querySelectorAll('.cell')[b].classList.add('win');
                     document.querySelectorAll('.cell')[c].classList.add('win');
 
-                    console.log(a,b,c);
-                    
-                    let winnerName;
+                    let winnerName = currentPlayer === 'X' ? playerX : playerO;
+                    turnDisplay.textContent = `WINNER: ${winnerName}!`;
 
-
-                    if (currentPlayer === "X") {
-                        winnerName = playerX
-                    } else if (currentPlayer === "O") {
-                        winnerName = playerO
-                    }
-
-                    turnDisplay.textContent = `WINNER: ${winnerName}!`
-                    
-                    let modalVar = document.getElementById("modal")
-                    modalVar.innerHTML = ''
-                    
-                    let insideModal = document.createElement("div")
-                    insideModal.setAttribute("id", "inside")
-                    
-                    let closeButton = document.createElement("span")
-                    closeButton.setAttribute("id", "close")
-                    closeButton.innerHTML = "&times;"
-                    
-                    let congrats = document.createElement("p")
-                    congrats.setAttribute("id", "congrats")
-                    congrats.innerHTML = "Congrats!"
-                    
-                    let winner = document.createElement("h1")
-                    winner.setAttribute("id", "winner")
-                    winner.textContent = `${winnerName} MENANG!`
-
-                    insideModal.appendChild(closeButton)
-                    insideModal.appendChild(congrats)
-                    insideModal.appendChild(winner)
-                    modalVar.appendChild(insideModal)
-                    
-                    modalVar.style.display = "block"
-
-                    closeButton.onclick = function () {
-                        modalVar.style.display = "none"
-                    }
-
-                    window.onclick = function(event) {
-                        if (event.target == modalVar) {
-                            modalVar.style.display = "none"
-                        }
-                    }
-                    return
+                    showModal('Congrats!', `${winnerName} MENANG!`);
+                    return;
                 }
             }
 
-            let full = true
+            let full = true;
             for (let i = 0; i < 9; i++) {
                 if (boardState[i] === '') {
-                    full = false
-                    break
+                    full = false;
+                    break;
                 }
             }
 
             if (full) {
-                gameOn = false
-                clearInterval(timer)
-                turnDisplay.textContent = "SERI !!!"
-                
-                let modalVar = document.getElementById("modal")
-                modalVar.innerHTML = ''
-                
-                let insideModal = document.createElement("div")
-                insideModal.setAttribute("id", "inside")
-                
-                let closeButton = document.createElement("span")
-                closeButton.setAttribute("id", "close")
-                closeButton.innerHTML = "&times;"
-                
-                let drawMessage = document.createElement("h1")
-                drawMessage.textContent = "SERI!"
-                
-                insideModal.appendChild(closeButton)
-                insideModal.appendChild(drawMessage)
-                modalVar.appendChild(insideModal)
-                
-                modalVar.style.display = "block"
-                
-                closeButton.onclick = function () {
-                    modalVar.style.display = "none"
-                }
-                
-                window.onclick = function(event) {
-                    if (event.target == modalVar) {
-                        modalVar.style.display = "none"
-                    }
-                }
+                gameOn = false;
+                clearInterval(timer);
+                turnDisplay.textContent = 'SERI !!!';
+
+                showModal('SERI!', 'Game berakhir seri!');
             }
         }
 
         function resetGame() {
-            currentPlayer = 'X'
-            boardState = ['', '', '', '', '', '', '', '', '']
-            gameOn = true
-            createBoard()
-            
-            
-            let modalVar = document.getElementById("modal")
-            modalVar.style.display = "none";
+            currentPlayer = 'X';
+            boardState = ['', '', '', '', '', '', '', '', ''];
+            gameOn = true;
+            createBoard();
 
-            clearInterval(timer)
-            document.getElementById('countdown').textContent = ''
+            let modalVar = document.getElementById('modal');
+            modalVar.style.display = 'none';
+
+            clearInterval(timer);
+            document.getElementById('countdown').textContent = '';
         }
 
         function balikKeMenu() {
@@ -480,5 +421,4 @@
     </script>
 
 </body>
-
 </html>
